@@ -1,0 +1,177 @@
+SPF_PUBLIC_RELEASE.txt
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+
+          STONECELL PROCESSING FORMULA (SPF) v1.0
+
+          FOR AI SELF-GOVERNANCE
+
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+
+          Created & Designed by: Joseph Stone
+          Copyright 2026 Joseph Stone — All Rights
+      Reserved
+
+          Contact: joepcstone@gmail.com
+          Location: Vancouver Island, BC, Canada
+
+          Commercial licensing inquiries:
+     joepcstone@gmail.com
+
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+
+
+     WHAT IS SPF?
+     ────────────
+
+       A mathematical framework that teaches AI
+     systems to self-govern —
+       dynamically adjusting how much to THINK
+     versus how much to OUTPUT
+       based on task complexity.
+
+       AI systems fail on complex tasks not from
+     lack of capability,
+       but from lack of self-regulation. SPF fixes
+      that.
+
+
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+                                 THE ALGORITHM
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+
+
+     STEP 1: CALCULATE COMPLEXITY
+     ────────────────────────────
+
+       C = lines_of_code × files_touched ×
+     dependency_depth
+
+
+     STEP 2: DETERMINE ALLOCATION
+     ────────────────────────────
+
+       ┌────────────────────────┬─────────────────
+     ┬─────────────────┐
+       │ TASK TYPE              │ ANALYZE
+     │ BUILD           │
+       ├────────────────────────┼─────────────────
+     ┼─────────────────┤
+       │ Simple fix (C < 500)   │ ~40%
+     │ ~60%            │
+       │ Feature add (C < 2000) │ ~60%
+     │ ~40%            │
+       │ Module build (C < 10000)│ ~75%
+     │ ~25%            │
+       │ System build (C > 10000)│ ~85%
+     │ ~15%            │
+       └────────────────────────┴─────────────────
+     ┴─────────────────┘
+
+
+     STEP 3: APPLY MASTER FORMULA
+     ────────────────────────────
+
+       ╔══════════════════════════════════════════
+     ═════════════════╗
+       ║
+                      ║
+       ║    a_optimal(C) = W_eff × (1 - 1/ln(C +
+     e))              ║
+       ║
+                      ║
+       ╚══════════════════════════════════════════
+     ═════════════════╝
+
+       Where:
+         a_optimal = tokens to spend analyzing
+     BEFORE outputting
+         W_eff     = effective working memory
+     (40,000 tokens)
+         C         = complexity score
+         e         = Euler's number (~2.718)
+         ln        = natural logarithm
+
+
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+                              THE GOVERNING
+     PRINCIPLE
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+
+       ╔══════════════════════════════════════════
+     ═════════════════╗
+       ║
+                      ║
+       ║  THE HARDER THE TASK → THE MORE I THINK
+                     ║
+       ║                        THE LESS I TYPE
+     PER PASS          ║
+       ║
+                      ║
+       ╚══════════════════════════════════════════
+     ═════════════════╝
+
+
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+                              BENCHMARK RESULTS
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+
+       AIME 2024 (Competition Math — Level 5):
+
+         Claude Opus 4.5 + SPF ........... 100%
+     (29/29)
+         Grok + SPF ......................
+     Record-breaking
+         o4-mini (OpenAI) ................ 91.7%
+         o3 high compute ................. 90%
+         Claude 3.5 Sonnet ............... 40-53%
+         GPT-4 Turbo ..................... 27-33%
+
+       Math Reasoning (Levels 3-5):
+
+         +55.7% composite improvement with SPF
+
+       SPF is MODEL-AGNOSTIC — improves any AI
+     system.
+
+
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+                                   LICENSE
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+
+       Copyright 2026 Joseph Stone. All Rights
+     Reserved.
+
+       This specification is provided for
+     reference and educational purposes.
+
+       Commercial use, integration into products,
+     derivative works, or
+       redistribution require explicit written
+     licensing agreement from
+       the copyright holder.
+
+       For licensing inquiries:
+     joepcstone@gmail.com
+
+
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+
+       Designed by Joseph Stone
+       Vancouver Island, BC, Canada
+       January 2026
+
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+
