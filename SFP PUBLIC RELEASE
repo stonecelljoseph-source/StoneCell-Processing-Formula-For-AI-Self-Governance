@@ -40,9 +40,78 @@ SPF_PUBLIC_RELEASE.txt
 
      ═════════════════════════════════════════════
      ══════════════════════════════════
-                                 THE ALGORITHM
+          THE ALGORITHM  -  BASE OF CODE
+     ═════════════════════════════════════════════
      ═════════════════════════════════════════════
      ══════════════════════════════════
+
+
+     STEP 1: CALCULATE COMPLEXITY
+     ────────────────────────────
+
+       C = processing power required analyze x processes × output.  
+     = ( analyses   = processing resources required to analyze all processes required to complete all processes 100% success ) 
+     x ( processes  = processing resources required to plan processes required by analysis 100% success ) 
+     x ( output     = processing resources needed to output planned process 100% success )
+
+
+     STEP 2: DETERMINE ALLOCATION
+     ────────────────────────────
+
+       ┌────────────────────────┬─────────────────
+     ┬─────────────────┐
+       │ TASK TYPE              │ ANALYZE
+     │ BUILD           │
+       ├────────────────────────┼─────────────────
+     ┼─────────────────┤
+       │ Simple process       (C < 500)   │ ~40%
+       | No analysis ( simple cmds )
+     │ ~60%            │
+       │ Simple process       (C < 2000) │ ~60%
+       | Low analysis 
+     │ ~40%            │
+       │ Medium complexity    (C < 10000)│ ~75%
+       | Higher analysis
+     │ ~25%            │
+       │ Difficult complexity (C > 10000)│ ~85%
+       | Mostly analysis
+     │ ~15%            │
+       └────────────────────────┴─────────────────
+     ┴─────────────────┘
+
+
+     STEP 3: APPLY MASTER FORMULA
+     ────────────────────────────
+
+       ╔══════════════════════════════════════════
+     ═════════════════╗
+       ║
+                      ║
+       ║    a_optimal(C) = W_eff × (1 - 1/ln(C +
+     e))              ║
+       ║
+                      ║
+       ╚══════════════════════════════════════════
+     ═════════════════╝
+
+       Where:
+         a_optimal = processing power required to spend analyzing
+     BEFORE outputting
+         W_eff     = effective working memory
+     (40,000 tokens)
+         C         = complexity score
+         e         = Euler's number (~2.718)
+         ln        = natural logarithm
+
+
+
+════════════════════════════════════════════════════════════════════
+════════════════════════════════════════════════════════════════════
+
+FOR IMPLEMENTATION INTO AI WITH TOKEN SYSTEM. USE BELOW ADJUSTEMENT
+
+     ════════════════════════════════════════════════════════════════════
+════════════════════════════════════════════════════════════════════
 
 
      STEP 1: CALCULATE COMPLEXITY
