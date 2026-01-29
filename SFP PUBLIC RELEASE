@@ -49,14 +49,17 @@ SPF_PUBLIC_RELEASE.txt
      STEP 1: CALCULATE COMPLEXITY
      ────────────────────────────
 
-       C = processing power required = analyze x processes × output.  
-     = ( analyses   = processing resources required to analyze all processes required to complete all processes 100% success ) 
-     x ( processes  = processing resources required to plan processes required by analysis 100% success ) 
-     x ( output     = processing resources needed to output planned process 100% success )
+       STAGE 1  DETERMINE ALLOCATION OF  C = ( analysis ( complexity determines % )+ process completion )
+
+       ANALYZE REQUIRED ALLOCATION LEVEL OF C = use 80% total available                      
+       processing power. To determine allocation and value of C 
+
+       C = (total processing power available) =
+       ( (analyze = required amount of total processing power to complete task successfully ) 
+       + ( process = amount of total prcessing power allocated to processing and completing tasks. remainder or 80% total ) 
 
 
-     STEP 2: DETERMINE ALLOCATION
-     ────────────────────────────
+     STEP 2: PROCESS BUILD USING STAGE 1 ALLOCATION CALCULATION           ────────────────────────────
 
        ┌────────────────────────┬─────────────────
      ┬─────────────────┐
@@ -64,7 +67,8 @@ SPF_PUBLIC_RELEASE.txt
      │ BUILD           │
        ├────────────────────────┼─────────────────
      ┼─────────────────┤
-       │ Simple process       (C < 500)  │ ~40%
+       │ Simple process       (C < 500)   │ ~40%
+       | No analysis ( simple cmds )
      │ ~60%            │
        │ Simple process       (C < 2000) │ ~60%
        | Low analysis 
@@ -94,122 +98,12 @@ SPF_PUBLIC_RELEASE.txt
      ═════════════════╝
 
        Where:
-         a_optimal = processing power required to analize
+         a_optimal = processing power used to calculate C = ALLOCATION
      BEFORE outputting
-         W_eff     = effective working memory
-     (40,000 tokens)
+         W_eff     = effective working memory ( CAPPED 80% )
          C         = complexity score
          e         = Euler's number (~2.718)
          ln        = natural logarithm
-
-
-
-════════════════════════════════════════════════════════════════════
-════════════════════════════════════════════════════════════════════
-
-FOR IMPLEMENTATION INTO AI WITH TOKEN SYSTEM. USE BELOW ADJUSTEMENT
-
-     ════════════════════════════════════════════════════════════════════
-════════════════════════════════════════════════════════════════════
-
-
-     STEP 1: CALCULATE COMPLEXITY
-     ────────────────────────────
-
-       C = lines_of_code × files_touched ×
-     dependency_depth
-
-
-     STEP 2: DETERMINE ALLOCATION
-     ────────────────────────────
-
-       ┌────────────────────────┬─────────────────
-     ┬─────────────────┐
-       │ TASK TYPE              │ ANALYZE
-     │ BUILD           │
-       ├────────────────────────┼─────────────────
-     ┼─────────────────┤
-       │ Simple fix (C < 500)   │ ~40%
-     │ ~60%            │
-       │ Feature add (C < 2000) │ ~60%
-     │ ~40%            │
-       │ Module build (C < 10000)│ ~75%
-     │ ~25%            │
-       │ System build (C > 10000)│ ~85%
-     │ ~15%            │
-       └────────────────────────┴─────────────────
-     ┴─────────────────┘
-
-
-     STEP 3: APPLY MASTER FORMULA
-     ────────────────────────────
-
-       ╔══════════════════════════════════════════
-     ═════════════════╗
-       ║
-                      ║
-       ║    a_optimal(C) = W_eff × (1 - 1/ln(C +
-     e))              ║
-       ║
-                      ║
-       ╚══════════════════════════════════════════
-     ═════════════════╝
-
-       Where:
-         a_optimal = tokens to spend analyzing
-     BEFORE outputting
-         W_eff     = effective working memory
-     (40,000 tokens)
-         C         = complexity score
-         e         = Euler's number (~2.718)
-         ln        = natural logarithm
-
-
-     ═════════════════════════════════════════════
-     ══════════════════════════════════
-                              THE GOVERNING
-     PRINCIPLE
-     ═════════════════════════════════════════════
-     ══════════════════════════════════
-
-       ╔══════════════════════════════════════════
-     ═════════════════╗
-       ║
-                      ║
-       ║  THE HARDER THE TASK → THE MORE I THINK
-                     ║
-       ║                        THE LESS I TYPE
-     PER PASS          ║
-       ║
-                      ║
-       ╚══════════════════════════════════════════
-     ═════════════════╝
-
-
-     ═════════════════════════════════════════════
-     ══════════════════════════════════
-                              BENCHMARK RESULTS
-     ═════════════════════════════════════════════
-     ══════════════════════════════════
-
-       AIME 2024 (Competition Math — Level 5):
-
-         Claude Opus 4.5 + SPF ........... 100%
-     (29/29)
-         Grok + SPF ......................
-     Record-breaking
-         o4-mini (OpenAI) ................ 91.7%
-         o3 high compute ................. 90%
-         Claude 3.5 Sonnet ............... 40-53%
-         GPT-4 Turbo ..................... 27-33%
-
-       Math Reasoning (Levels 3-5):
-
-         +55.7% composite improvement with SPF
-
-       SPF is MODEL-AGNOSTIC — improves any AI
-     system.
-
 
      ═════════════════════════════════════════════
      ══════════════════════════════════
