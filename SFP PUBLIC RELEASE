@@ -49,7 +49,7 @@ SPF_PUBLIC_RELEASE.txt
      STEP 1: CALCULATE COMPLEXITY
      ────────────────────────────
 
-       C = processing power required analyze x processes × output.  
+       C = processing power required = analyze x processes × output.  
      = ( analyses   = processing resources required to analyze all processes required to complete all processes 100% success ) 
      x ( processes  = processing resources required to plan processes required by analysis 100% success ) 
      x ( output     = processing resources needed to output planned process 100% success )
@@ -64,8 +64,7 @@ SPF_PUBLIC_RELEASE.txt
      │ BUILD           │
        ├────────────────────────┼─────────────────
      ┼─────────────────┤
-       │ Simple process       (C < 500)   │ ~40%
-       | No analysis ( simple cmds )
+       │ Simple process       (C < 500)  │ ~40%
      │ ~60%            │
        │ Simple process       (C < 2000) │ ~60%
        | Low analysis 
@@ -95,7 +94,7 @@ SPF_PUBLIC_RELEASE.txt
      ═════════════════╝
 
        Where:
-         a_optimal = processing power required to spend analyzing
+         a_optimal = processing power required to analize
      BEFORE outputting
          W_eff     = effective working memory
      (40,000 tokens)
