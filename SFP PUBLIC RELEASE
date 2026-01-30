@@ -77,45 +77,159 @@ Just smarter resource allocation.
      ═════════════════════════════════════════════
      ══════════════════════════════════
 
-Overall Success Probability
-
-P(success) = 1 − ∏_{i=1}^{D} (1 − P_i)
-(where D = number of subtasks, P_i = probability of success for subtask i)
 
 
-2. Subtask Success Probability
-P_i = Q(a) × L(m) × V(v) × B(b)
+
+  MASTER EQUATION — Overall Success Probability
+  ────────────────────────────────────────────────────
+  ────────────────────────────
+
+      P(success) = 1 - ∏(1 - Pᵢ)    for i = 1..D
+  subtasks
+
+      Where:
+        D = number of subtasks
+        Pᵢ = probability of subtask i succeeding
 
 
-3. Individual Components
-Q(a) = Quality from analysis depth
-Q(a) = 1 − e^{−0.00004 × a}
-L(m) = Lookup from external memory
-L(m) = 1 − 0.20^{m / 2000}
-V(v) = Verification accuracy
-V(v) = 1 − (1 − 0.75)^v
-B(b) = Build Anchor compliance
-B(b) = checks_done / checks_required
+  SUBTASK PROBABILITY
+  ────────────────────────────────────────────────────
+  ────────────────────────────
+
+      Pᵢ = Q(a) × L(m) × V(v) × B(b)
+
+      Where:
+        Q(a) = Quality from analysis depth
+        L(m) = Lookup from external memory
+        V(v) = Verification accuracy
+        B(b) = Build Anchor compliance
 
 
-4. Dynamic Analysis Allocation
-a_optimal(C) = W_eff × (1 − 1 / ln(C + e))
-(where C = complexity score, W_eff = effective working memory)
+  COMPONENT FORMULAS
+  ────────────────────────────────────────────────────
+  ────────────────────────────
+
+      Q(a) = 1 - e^(-0.00004 × a)
+
+        Where: a = analysis tokens spent
+
+      L(m) = 1 - 0.20^(m/2000)
+
+        Where: m = memory tokens retrieved
+
+      V(v) = 1 - (1 - 0.75)^v
+           = 1 - 0.25^v
+
+        Where: v = verification passes
+
+      B(b) = checks_done / checks_required
+
+        Where: b = build anchor compliance ratio
 
 
-5. Complexity Score
-C = LOC_score × Files_score × Dependency_score
+  DYNAMIC ANALYSIS ALLOCATION
+  ────────────────────────────────────────────────────
+  ────────────────────────────
+
+      a_optimal(C) = W_eff × (1 - 1/ln(C + e))
+
+      Where:
+        a_optimal = optimal tokens for analysis
+        W_eff     = 40,000 (effective working memory)
+        C         = complexity score
+        e         = 2.718 (Euler's number)
+        ln        = natural logarithm
 
 
-6. Allocation Thresholds 
+  COMPLEXITY FORMULA (OLD)
+  ────────────────────────────────────────────────────
+  ────────────────────────────
 
-C_max        Analyze %       Build %      Verify Passes
-< 50            25%            75%              1
-< 200           40%            60%              1
-< 1000          60%            40%              2
-< 5000          75%            25%              2
-< 15000         85%            15%              3
-≥ 99999         90%            10%              3
+      C = LOC_score × Files_score × Dependency_score
+
+
+  ALLOCATION THRESHOLDS
+  ────────────────────────────────────────────────────
+  ────────────────────────────
+
+      ┌────────────┬─────────┬─────────┬─────────┬────
+  ─────────────┐
+      │ TIER       │ C_max   │ ANALYZE │ BUILD   │
+  VERIFY_PASSES   │
+      ├────────────┼─────────┼─────────┼─────────┼────
+  ─────────────┤
+      │ minimal    │ 50      │ 25%     │ 75%     │ 1
+               │
+      │ light      │ 200     │ 40%     │ 60%     │ 1
+               │
+      │ standard   │ 1000    │ 60%     │ 40%     │ 2
+               │
+      │ full       │ 5000    │ 75%     │ 25%     │ 2
+               │
+      │ maximum    │ 15000   │ 85%     │ 15%     │ 3
+               │
+      │ critical   │ 99999   │ 90%     │ 10%     │ 3
+               │
+      └────────────┴─────────┴─────────┴─────────┴────
+  ─────────────┘
+
+
+  DECOMPOSITION RULE
+  ────────────────────────────────────────────────────
+  ────────────────────────────
+
+      D = ⌈C / 350⌉
+
+      Where:
+        D = number of subtasks
+        C = complexity score
+        ⌈ ⌉ = ceiling function
+
+      Trigger: C > 500 OR output > 500 lines
+
+
+  CONTEXT BUDGET ALLOCATION
+  ────────────────────────────────────────────────────
+  ────────────────────────────
+
+      ┌────────────────────────────┬─────────┐
+      │ CATEGORY                   │ BUDGET  │
+      ├────────────────────────────┼─────────┤
+      │ Active code files          │ 40%     │
+      │ Architecture + STATUS      │ 15%     │
+      │ Change manifests           │ 10%     │
+      │ External memory (Brain)    │ 10%     │
+      │ User instructions          │ 10%     │
+      │ Discussion                 │ 10%     │
+      │ Safety buffer              │ 5%      │
+      └────────────────────────────┴─────────┘
+      TOTAL                          100%
+
+
+  OUTPUT LIMITS
+  ────────────────────────────────────────────────────
+  ────────────────────────────
+
+      Quality threshold:           500 lines/response
+      Hard max:                    4000 lines/response
+      Max files per subtask:       7
+      Max reasoning chain:         10 steps
+      Max simultaneous subsystems: 7
+
+
+  CAPACITY REFERENCE
+  ────────────────────────────────────────────────────
+  ────────────────────────────
+
+      Context window:              200,000 tokens
+      Effective working memory:    40,000 tokens
+      Memory decay:                15-25% per 50K new
+  tokens
+      Single-pass verification:    75% error detection
+
+
+  ════════════════════════════════════════════════════
+  ═══════════════════════════
 
 
 
