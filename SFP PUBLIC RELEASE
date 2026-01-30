@@ -40,70 +40,221 @@ SPF_PUBLIC_RELEASE.txt
 
      ═════════════════════════════════════════════
      ══════════════════════════════════
-          THE ALGORITHM  -  BASE OF CODE
+          THE ALGORITHM  -  ORIGINAL CONCEPT
      ═════════════════════════════════════════════
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+ ──────────────────────────────────────────────────────────────────────────
+
+SPF is elegantly simple:
+
+  CORE FORMULA:
+    a_optimal(C) = W_eff × (1 - 1/ln(C + e))
+
+  Where:
+    C = task complexity (calculated from scope metrics)
+    W_eff = effective working memory
+    a_optimal = tokens to allocate to analysis before output
+
+  ALLOCATION TABLE:
+    Simple tasks (C < 500):     40% think, 60% output
+    Medium tasks (C < 2000):    60% think, 40% output
+    Complex tasks (C < 10000):  75% think, 25% output
+    Critical tasks (C > 10000): 85% think, 15% output
+
+  PRINCIPLE:
+    The harder the task → the more I think, the less I type per pass.
+
+That's it. No retraining. No fine-tuning. No new data. No new compute.
+Just smarter resource allocation.
+
+
+
+
+═════════════════════════════════════════════
+     ══════════════════════════════════
+               FIRST EVOLUTION   
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+
+Overall Success Probability
+
+P(success) = 1 − ∏_{i=1}^{D} (1 − P_i)
+(where D = number of subtasks, P_i = probability of success for subtask i)
+
+
+2. Subtask Success Probability
+P_i = Q(a) × L(m) × V(v) × B(b)
+
+
+3. Individual Components
+Q(a) = Quality from analysis depth
+Q(a) = 1 − e^{−0.00004 × a}
+L(m) = Lookup from external memory
+L(m) = 1 − 0.20^{m / 2000}
+V(v) = Verification accuracy
+V(v) = 1 − (1 − 0.75)^v
+B(b) = Build Anchor compliance
+B(b) = checks_done / checks_required
+
+
+4. Dynamic Analysis Allocation
+a_optimal(C) = W_eff × (1 − 1 / ln(C + e))
+(where C = complexity score, W_eff = effective working memory)
+
+
+5. Complexity Score
+C = LOC_score × Files_score × Dependency_score
+
+
+6. Allocation Thresholds 
+
+C_max        Analyze %       Build %      Verify Passes
+< 50            25%            75%              1
+< 200           40%            60%              1
+< 1000          60%            40%              2
+< 5000          75%            25%              2
+< 15000         85%            15%              3
+≥ 99999         90%            10%              3
+
+
+
+     ═════════════════════════════════════════════
+     ══════════════════════════════════
+                    WEIGHTED   SPF
      ═════════════════════════════════════════════
      ══════════════════════════════════
 
 
-     STEP 1: CALCULATE COMPLEXITY
-     ────────────────────────────
+════════════════════════════════════════════════════
+  ═══════════════════════════
 
-       STAGE 1  DETERMINE ALLOCATION OF  C = ( analysis ( complexity determines % )+ process completion )
+  STEP 1: CALCULATE COMPLEXITY
+  ────────────────────────────────────────────────────
+  ────────────────────────────
 
-       ANALYZE REQUIRED ALLOCATION LEVEL OF C = use 80% total available                      
-       processing power. To determine allocation and value of C 
+      C = (basic ^ 1) + (dependencies ^ 7) + (complex
+  ^ 10)
 
-       C = (total processing power available) =
-       ( (analyze = required amount of total processing power to complete task successfully ) 
-       + ( process = amount of total prcessing power allocated to processing and completing tasks. remainder or 80% total ) 
-
-
-     STEP 2: PROCESS BUILD USING STAGE 1 ALLOCATION CALCULATION           ────────────────────────────
-
-       ┌────────────────────────┬─────────────────
-     ┬─────────────────┐
-       │ TASK TYPE              │ ANALYZE
-     │ BUILD           │
-       ├────────────────────────┼─────────────────
-     ┼─────────────────┤
-       │ Simple process       (C < 500)   │ ~40%
-       | No analysis ( simple cmds )
-     │ ~60%            │
-       │ Simple process       (C < 2000) │ ~60%
-       | Low analysis 
-     │ ~40%            │
-       │ Medium complexity    (C < 10000)│ ~75%
-       | Higher analysis
-     │ ~25%            │
-       │ Difficult complexity (C > 10000)│ ~85%
-       | Mostly analysis
-     │ ~15%            │
-       └────────────────────────┴─────────────────
-     ┴─────────────────┘
+      Where:
+        basic        = simple linear operations
+         → ^1
+        dependencies = chains/dependencies
+         → ^7
+        complex      = complex completions/risks
+         → ^10
 
 
-     STEP 3: APPLY MASTER FORMULA
-     ────────────────────────────
+  STEP 2: DETERMINE ALLOCATION
+  ────────────────────────────────────────────────────
+  ────────────────────────────
 
-       ╔══════════════════════════════════════════
-     ═════════════════╗
-       ║
-                      ║
-       ║    a_optimal(C) = W_eff × (1 - 1/ln(C +
-     e))              ║
-       ║
-                      ║
-       ╚══════════════════════════════════════════
-     ═════════════════╝
+      ┌─────────────────────────┬─────────────┬───────
+  ──────┐
+      │ TASK TYPE               │ ANALYZE     │ BUILD
+        │
+      ├─────────────────────────┼─────────────┼───────
+  ──────┤
+      │ Simple      (C < 500)   │    40%      │    60%
+        │
+      │ Light       (C < 2000)  │    60%      │    40%
+        │
+      │ Medium      (C < 10000) │    75%      │    25%
+        │
+      │ Critical    (C > 10000) │    85%      │    15%
+        │
+      └─────────────────────────┴─────────────┴───────
+  ──────┘
 
-       Where:
-         a_optimal = processing power used to calculate C = ALLOCATION
-     BEFORE outputting
-         W_eff     = effective working memory ( CAPPED 80% )
-         C         = complexity score
-         e         = Euler's number (~2.718)
-         ln        = natural logarithm
+
+  STEP 3: APPLY MASTER FORMULA
+  ────────────────────────────────────────────────────
+  ────────────────────────────
+
+      a_optimal(C) = W_eff × (1 - 1/ln(C + e))
+
+      Where:
+        a_optimal = tokens for ANALYZE before BUILD
+        W_eff     = effective working memory (80% cap)
+        C         = complexity score
+        e         = Euler's number (~2.718)
+        ln        = natural logarithm
+
+
+  ════════════════════════════════════════════════════
+  ═══════════════════════════
+                                    LICENSE
+  ════════════════════════════════════════════════════
+  ═══════════════════════════
+
+      Copyright 2026 Joseph Stone. All Rights
+  Reserved.
+      Commercial use requires written licensing
+  agreement.
+      Contact: joepcstone@gmail.com
+
+  ════════════════════════════════════════════════════
+  ═══════════════════════════
+
+  ---
+  EXPLANATION
+
+  Why tiered powers?
+  - Basic (^1): Linear. 30 lines = 30. No punishment.
+  - Deps (^7): 2 deps = 128. 3 deps = 2,187. Explodes
+  fast.
+  - Complex (^10): 2 risks = 1,024. 3 risks = 59,049.
+  Nuclear.
+
+  The effect: Higher C → Higher tier → More analysis
+  forced before build.
+
+  ---
+  POWER REFERENCE
+  ┌──────────────┬──────────────────┐
+  │  ^7 (deps)   │  ^10 (complex)   │
+  ├──────────────┼──────────────────┤
+  │ 1^7 = 1      │ 1^10 = 1         │
+  ├──────────────┼──────────────────┤
+  │ 2^7 = 128    │ 2^10 = 1,024     │
+  ├──────────────┼──────────────────┤
+  │ 3^7 = 2,187  │ 3^10 = 59,049    │
+  ├──────────────┼──────────────────┤
+  │ 4^7 = 16,384 │ 4^10 = 1,048,576 │
+  ├──────────────┼──────────────────┤
+  │ 5^7 = 78,125 │ 5^10 = 9,765,625 │
+  └──────────────┴──────────────────┘
+  ---
+  EXAMPLES
+  Task: 10 basic, 0 deps, 0 complex
+  C Calculation: 10 + 0 + 0
+  C Value: 10
+  Tier: Simple
+  Allocation: 40/60
+  ────────────────────────────────────────
+  Task: 10 basic, 2 deps, 0 complex
+  C Calculation: 10 + 128 + 0
+  C Value: 138
+  Tier: Simple
+  Allocation: 40/60
+  ────────────────────────────────────────
+  Task: 10 basic, 2 deps, 1 complex
+  C Calculation: 10 + 128 + 1
+  C Value: 139
+  Tier: Simple
+  Allocation: 40/60
+  ────────────────────────────────────────
+  Task: 10 basic, 3 deps, 1 complex
+  C Calculation: 10 + 2187 + 1
+  C Value: 2,198
+  Tier: Medium
+  Allocation: 75/25
+  ────────────────────────────────────────
+  Task: 10 basic, 4 deps, 2 complex
+  C Calculation: 10 + 16384 + 1024
+  C Value: 17,418
+  Tier: Critical
+  Allocation: 85/15
 
      ═════════════════════════════════════════════
      ══════════════════════════════════
