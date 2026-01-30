@@ -126,15 +126,16 @@ C_max        Analyze %       Build %      Verify Passes
      ══════════════════════════════════
 
 
-════════════════════════════════════════════════════
+ ════════════════════════════════════════════════════
   ═══════════════════════════
+
 
   STEP 1: CALCULATE COMPLEXITY
   ────────────────────────────────────────────────────
   ────────────────────────────
 
       C = (basic ^ 1) + (dependencies ^ 7) + (complex
-  ^ 10)
+  ^ 10) + (files × 10)
 
       Where:
         basic        = simple linear operations
@@ -143,6 +144,8 @@ C_max        Analyze %       Build %      Verify Passes
          → ^7
         complex      = complex completions/risks
          → ^10
+        files        = number of files affected
+         → ×10
 
 
   STEP 2: DETERMINE ALLOCATION
@@ -183,78 +186,6 @@ C_max        Analyze %       Build %      Verify Passes
 
   ════════════════════════════════════════════════════
   ═══════════════════════════
-                                    LICENSE
-  ════════════════════════════════════════════════════
-  ═══════════════════════════
-
-      Copyright 2026 Joseph Stone. All Rights
-  Reserved.
-      Commercial use requires written licensing
-  agreement.
-      Contact: joepcstone@gmail.com
-
-  ════════════════════════════════════════════════════
-  ═══════════════════════════
-
-  ---
-  EXPLANATION
-
-  Why tiered powers?
-  - Basic (^1): Linear. 30 lines = 30. No punishment.
-  - Deps (^7): 2 deps = 128. 3 deps = 2,187. Explodes
-  fast.
-  - Complex (^10): 2 risks = 1,024. 3 risks = 59,049.
-  Nuclear.
-
-  The effect: Higher C → Higher tier → More analysis
-  forced before build.
-
-  ---
-  POWER REFERENCE
-  ┌──────────────┬──────────────────┐
-  │  ^7 (deps)   │  ^10 (complex)   │
-  ├──────────────┼──────────────────┤
-  │ 1^7 = 1      │ 1^10 = 1         │
-  ├──────────────┼──────────────────┤
-  │ 2^7 = 128    │ 2^10 = 1,024     │
-  ├──────────────┼──────────────────┤
-  │ 3^7 = 2,187  │ 3^10 = 59,049    │
-  ├──────────────┼──────────────────┤
-  │ 4^7 = 16,384 │ 4^10 = 1,048,576 │
-  ├──────────────┼──────────────────┤
-  │ 5^7 = 78,125 │ 5^10 = 9,765,625 │
-  └──────────────┴──────────────────┘
-  ---
-  EXAMPLES
-  Task: 10 basic, 0 deps, 0 complex
-  C Calculation: 10 + 0 + 0
-  C Value: 10
-  Tier: Simple
-  Allocation: 40/60
-  ────────────────────────────────────────
-  Task: 10 basic, 2 deps, 0 complex
-  C Calculation: 10 + 128 + 0
-  C Value: 138
-  Tier: Simple
-  Allocation: 40/60
-  ────────────────────────────────────────
-  Task: 10 basic, 2 deps, 1 complex
-  C Calculation: 10 + 128 + 1
-  C Value: 139
-  Tier: Simple
-  Allocation: 40/60
-  ────────────────────────────────────────
-  Task: 10 basic, 3 deps, 1 complex
-  C Calculation: 10 + 2187 + 1
-  C Value: 2,198
-  Tier: Medium
-  Allocation: 75/25
-  ────────────────────────────────────────
-  Task: 10 basic, 4 deps, 2 complex
-  C Calculation: 10 + 16384 + 1024
-  C Value: 17,418
-  Tier: Critical
-  Allocation: 85/15
 
      ═════════════════════════════════════════════
      ══════════════════════════════════
